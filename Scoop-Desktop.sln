@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopDesktop", "ScoopDesktop\ScoopDesktop.csproj", "{BDD9F541-074B-4887-8391-5D6D4C82B1F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopDesktop.Utils", "ScoopDesktop.Utils\ScoopDesktop.Utils.csproj", "{6F417264-5193-4053-942A-D468D9D77EE4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDD9F541-074B-4887-8391-5D6D4C82B1F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDD9F541-074B-4887-8391-5D6D4C82B1F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDD9F541-074B-4887-8391-5D6D4C82B1F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDD9F541-074B-4887-8391-5D6D4C82B1F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F417264-5193-4053-942A-D468D9D77EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F417264-5193-4053-942A-D468D9D77EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F417264-5193-4053-942A-D468D9D77EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F417264-5193-4053-942A-D468D9D77EE4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4A34E213-8D61-4D97-99B9-3D13834927A5}
+	EndGlobalSection
+EndGlobal
