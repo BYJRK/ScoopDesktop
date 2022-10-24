@@ -111,11 +111,6 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <ui:ProgressRing
-            Grid.RowSpan="2"
-            Width="50"
-            Height="50"
-            d:IsActive="False"
-            IsActive="{Binding IsProgressRingActive}" />
+        <ui:ProgressRing Grid.RowSpan="2" d:IsActive="False" IsActive="{Binding IsProgressRingActive}" />
     </Grid>
 </Page>

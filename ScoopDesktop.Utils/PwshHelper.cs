@@ -14,7 +14,7 @@ namespace ScoopDesktop.Utils
                 p.StartInfo.Arguments = command;
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                return p.StandardOutput.ReadToEnd();
+                return p.StandardOutput.ReadToEnd().TrimEnd();
             });
         }
         

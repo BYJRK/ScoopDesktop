@@ -6,16 +6,47 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ScoopDesktop.Pages"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     Title="SettingsView"
     d:DesignHeight="450"
     d:DesignWidth="800"
     d:Background="White"
+    d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
     mc:Ignorable="d">
-    <StackPanel Margin="10">
-        <ui:ToggleSwitch
-            Header="Dark Mode"
-            OnContent="Dark"
-            OffContent="Light"
-            Toggled="ToggleSwitch_Toggled" />
-    </StackPanel>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlPageTextBaseHighBrush}" />
+        </Style>
+        <Style x:Key="Subheader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <StackPanel Margin="12">
+            <TextBlock Margin="0,20" Text="Setting" FontSize="24" />
+            <ui:ToggleSwitch
+                Header="Dark Mode"
+                OnContent="Dark"
+                OffContent="Light"
+                IsOn="{Binding DarkMode, Mode=TwoWay}" />
+            <TextBlock Text="Scoop Proxy" Style="{DynamicResource Subheader}" />
+            <DockPanel>
+                <Button
+                    Width="75"
+                    Margin="12,0,0,0"
+                    Content="Apply"
+                    DockPanel.Dock="Right" />
+                <TextBox ui:ControlHelper.PlaceholderText="Proxy IP and port" Text="{Binding Proxy}" />
+            </DockPanel>
+        </StackPanel>
+
+        <ui:ProgressRing IsActive="{Binding IsBusy}" />
+    </Grid>
 </Page>

@@ -51,7 +51,7 @@ public partial class MainWindowViewModel : ObservableObject
                     break;
                 case "BucketList":
                     throw new NotImplementedException(header);
-                    CurrentPage = new BucketsView();
+                    //CurrentPage = new BucketsView();
                     break;
                 case "Setting":
                     CurrentPage = new SettingsView { DataContext = settingsViewModel };
