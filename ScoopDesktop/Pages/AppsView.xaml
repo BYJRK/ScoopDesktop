@@ -63,7 +63,7 @@
                                 </MenuItem>
                                 <MenuItem Header="Home" Command="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.Tag.OpenHomePageCommand}" CommandParameter="{Binding}">
                                     <MenuItem.Icon>
-                                        <ui:FontIcon Glyph="&#xE80F;" FontFamily="Segoe MDL2 Assets" />
+                                        <ui:FontIcon Glyph="&#xE774;" FontFamily="Segoe MDL2 Assets" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Header="Show in Explorer" Command="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.Tag.OpenFolderCommand}" CommandParameter="{Binding}">
@@ -72,9 +72,17 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
-                                <MenuItem Header="Update" Visibility="{Binding CanUpdate, Converter={vc:BoolToVisibilityConverter}}" />
+                                <MenuItem Header="Update" Visibility="{Binding CanUpdate, Converter={vc:BoolToVisibilityConverter}}">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xE74A;" FontFamily="Segoe MDL2 Assets" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                                 <MenuItem Header="Freeze" Visibility="Collapsed" />
-                                <MenuItem Header="Uninstall" />
+                                <MenuItem Header="Uninstall" Command="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.Tag.UninstallCommand}" CommandParameter="{Binding}">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xE74D;" FontFamily="Segoe MDL2 Assets" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </Setter.Value>
                     </Setter>

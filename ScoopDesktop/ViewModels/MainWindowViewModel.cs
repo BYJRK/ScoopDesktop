@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ScoopDesktop.Pages;
-using System;
+﻿using ScoopDesktop.Pages;
 using System.Windows.Controls;
 
 namespace ScoopDesktop.ViewModels;

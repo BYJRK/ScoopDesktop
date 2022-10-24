@@ -1,15 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ScoopDesktop.Helpers;
+﻿using ScoopDesktop.Helpers;
 using ScoopDesktop.Models;
 using ScoopDesktop.Utils;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ScoopDesktop.ViewModels;
 
@@ -25,6 +19,8 @@ public partial class AppsViewModel : PageViewModelBase
 
     #endregion
 
+    private HashSet<string> updateApps;
+
     #region Commands
 
     [RelayCommand]
@@ -38,6 +34,9 @@ public partial class AppsViewModel : PageViewModelBase
                 continue;
             AppList.Add(AppInfo.LoadInfoFromPath(app));
         }
+
+        foreach (var app in AppList)
+            app.CanUpdate = updateApps.Contains(app.AppName);
     }
 
     [RelayCommand]
@@ -61,13 +60,13 @@ public partial class AppsViewModel : PageViewModelBase
 
         IsBusy = false;
 
-        await PopupHelper.ShowInfo(message, app.AppName, isMono: true);
+        await PopupHelper.Info(message, app.AppName, isMono: true);
     }
 
     [RelayCommand]
     private async Task Update()
     {
-        await PopupHelper.ShowScoopStatus("Scoop Update", true);
+        await PopupHelper.ScoopStatus("Scoop Update", true);
     }
 
     [RelayCommand]
@@ -77,7 +76,7 @@ public partial class AppsViewModel : PageViewModelBase
 
         var output = await PwshHelper.RunCommandAsync("scoop status");
 
-        var apps = output
+        updateApps = output
             .Split(Environment.NewLine)
             .SkipWhile(line => !line.StartsWith("----"))
             .Skip(1)
@@ -85,9 +84,26 @@ public partial class AppsViewModel : PageViewModelBase
             .ToHashSet();
 
         foreach (var app in AppList)
-            app.CanUpdate = apps.Contains(app.AppName);
+            app.CanUpdate = updateApps.Contains(app.AppName);
 
         IsBusy = false;
+    }
+
+    [RelayCommand]
+    private async Task Uninstall(AppInfo app)
+    {
+        if (await PopupHelper.YesNo($"Are you sure you want to uninstall {app.AppName}?", "Scoop Uninstall") == ModernWpf.Controls.ContentDialogResult.Primary)
+        {
+            IsBusy = true;
+
+            await PwshHelper.RunCommandAsync($"scoop uninstall {app.AppName}");
+
+            await PopupHelper.Info($"{app.AppName} is uninstalled successfully.");
+
+            Loaded();
+
+            IsBusy = false;
+        }
     }
 
     #endregion
@@ -95,5 +111,7 @@ public partial class AppsViewModel : PageViewModelBase
     public AppsViewModel()
     {
         IsCommandBarVisible = true;
+
+        updateApps = new HashSet<string>();
     }
 }

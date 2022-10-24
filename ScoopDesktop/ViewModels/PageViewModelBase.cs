@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace ScoopDesktop.ViewModels
+﻿namespace ScoopDesktop.ViewModels
 {
     public class PageViewModelBase : ObservableObject
     {

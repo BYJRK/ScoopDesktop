@@ -1,8 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ModernWpf;
+﻿using ModernWpf;
 using ScoopDesktop.Utils;
-using System.Threading.Tasks;
 
 namespace ScoopDesktop.ViewModels;
 

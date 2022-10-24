@@ -1,13 +1,8 @@
 ﻿using ModernWpf.Controls;
 using ScoopDesktop.Utils;
-using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace ScoopDesktop.Helpers;
 
@@ -38,7 +33,7 @@ public static class PopupHelper
         return dialog;
     }
 
-    public static async Task ShowInfo(string info, string? title = null, bool isMono = false, bool preventEsc = false, string closeText = "Close")
+    public static async Task Info(string info, string? title = null, bool isMono = false, bool preventEsc = false, string closeText = "Close")
     {
         var dialog = GetDialog(info, title, isMono, preventEsc);
 
@@ -48,7 +43,7 @@ public static class PopupHelper
         await dialog.ShowAsync();
     }
 
-    public static async Task ShowScoopStatus(string? title, bool isMono = false)
+    public static async Task ScoopStatus(string? title, bool isMono = false)
     {
         var dialog = GetDialog(null, title, isMono, true);
 
@@ -74,5 +69,16 @@ public static class PopupHelper
         };
 
         await dialog.ShowAsync();
+    }
+
+    public static async Task<ContentDialogResult> YesNo(string info, string? title = null, string yes = "Yes", string no = "No")
+    {
+        var dialog = GetDialog(info, title);
+
+        dialog.DefaultButton = ContentDialogButton.Primary;
+        dialog.PrimaryButtonText = yes;
+        dialog.CloseButtonText = no;
+
+        return await dialog.ShowAsync();
     }
 }
