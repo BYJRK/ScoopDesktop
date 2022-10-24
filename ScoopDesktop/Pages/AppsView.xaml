@@ -8,6 +8,7 @@
     xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:vc="clr-namespace:ScoopDesktop.Converters"
     Title="AppListView"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -29,6 +30,7 @@
             Grid.Row="0"
             d:ItemsSource="{d:SampleData ItemCount=10}"
             ItemsSource="{Binding AppList}"
+            CanUserSortColumns="True"
             Style="{StaticResource ReadOnlyDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn
@@ -46,6 +48,7 @@
                     Header="Version"
                     Binding="{Binding Version}"
                     IsReadOnly="True" />
+                <DataGridCheckBoxColumn Header="New Version" Binding="{Binding CanUpdate}" IsReadOnly="True" />
             </DataGrid.Columns>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow" BasedOn="{StaticResource DefaultDataGridRowStyle}">
@@ -69,7 +72,7 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
-                                <MenuItem Header="Update" />
+                                <MenuItem Header="Update" Visibility="{Binding CanUpdate, Converter={vc:BoolToVisibilityConverter}}" />
                                 <MenuItem Header="Freeze" Visibility="Collapsed" />
                                 <MenuItem Header="Uninstall" />
                             </ContextMenu>
@@ -111,6 +114,19 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <ui:ProgressRing Grid.RowSpan="2" d:IsActive="False" IsActive="{Binding IsProgressRingActive}" />
+        <ui:CommandBar Grid.Row="1">
+            <ui:CommandBar.PrimaryCommands>
+                <ui:AppBarButton Label="Refresh" Icon="Refresh" Command="{Binding LoadedCommand}" />
+                <ui:AppBarButton Label="Update" Icon="Sync" Command="{Binding UpdateCommand}" />
+                <ui:AppBarButton Label="Status" Command="{Binding GetStatusCommand}">
+                    <ui:AppBarButton.Icon>
+                        <ui:FontIcon Glyph="&#xF0B5;" FontFamily="Segoe MDL2 Assets" />
+                    </ui:AppBarButton.Icon>
+                </ui:AppBarButton>
+                <ui:AppBarSeparator />
+                <ui:AppBarButton Label="Cleanup" Icon="Delete" IsEnabled="False" />
+            </ui:CommandBar.PrimaryCommands>
+        </ui:CommandBar>
+        <ui:ProgressRing Grid.RowSpan="2" d:IsActive="False" IsActive="{Binding IsBusy}" />
     </Grid>
 </Page>

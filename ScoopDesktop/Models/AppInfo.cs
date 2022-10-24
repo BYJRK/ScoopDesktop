@@ -1,29 +1,39 @@
-﻿using ScoopDesktop.Utils;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ScoopDesktop.Utils;
 using System;
 using System.IO;
 
-namespace ScoopDesktop.Models
+namespace ScoopDesktop.Models;
+
+public partial class AppInfo : ObservableObject
 {
-    public partial class AppInfo
+    [ObservableProperty]
+    string appName;
+
+    [ObservableProperty]
+    string version;
+
+    [ObservableProperty]
+    string bucket;
+
+    [ObservableProperty]
+    string? homePage;
+
+    [ObservableProperty]
+    string? folder;
+
+    [ObservableProperty]
+    bool canUpdate;
+
+    public static AppInfo LoadInfoFromPath(string path)
     {
-        private AppInfo() { }
-
-        public string AppName { get; init; }
-        public string Version { get; init; }
-        public string Bucket { get; init; }
-        public string? HomePage { get; init; }
-        public string? Folder { get; init; }
-
-        public static AppInfo LoadInfoFromPath(string path)
+        return new()
         {
-            return new()
-            {
-                AppName = Path.GetFileName(path) ?? throw new ArgumentException(path),
-                Version = ScoopHelper.GetAppVersion(path) ?? throw new ArgumentException(path),
-                Bucket = ScoopHelper.GetAppBucket(path) ?? throw new ArgumentException(path),
-                HomePage = ScoopHelper.GetAppHomePage(path),
-                Folder = path
-            };
-        }
+            AppName = Path.GetFileName(path) ?? throw new ArgumentException(path),
+            Version = ScoopHelper.GetAppVersion(path) ?? throw new ArgumentException(path),
+            Bucket = ScoopHelper.GetAppBucket(path) ?? throw new ArgumentException(path),
+            HomePage = ScoopHelper.GetAppHomePage(path),
+            Folder = path
+        };
     }
 }

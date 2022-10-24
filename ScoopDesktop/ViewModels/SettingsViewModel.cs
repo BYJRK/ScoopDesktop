@@ -35,7 +35,7 @@ public partial class SettingsViewModel : PageViewModelBase
     {
         IsBusy = true;
 
-        Proxy = await PwshHelper.RunPowerShellCommandAsync("scoop config proxy");
+        Proxy = await PwshHelper.RunCommandAsync("scoop config proxy");
 
         IsBusy = false;
     }
@@ -45,7 +45,7 @@ public partial class SettingsViewModel : PageViewModelBase
     {
         IsBusy = true;
 
-        await PwshHelper.RunPowerShellCommandAsync($"scoop config proxy {Proxy}");
+        await PwshHelper.RunCommandAsync($"scoop config proxy {Proxy}");
 
         IsBusy = false;
     }

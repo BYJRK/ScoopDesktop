@@ -4,7 +4,7 @@ namespace ScoopDesktop.Utils
 {
     public class PwshHelper
     {
-        public static async Task<string> RunPowerShellCommandAsync(string command)
+        public static async Task<string> RunCommandAsync(string command)
         {
             return await Task.Run(() =>
             {
@@ -18,7 +18,7 @@ namespace ScoopDesktop.Utils
             });
         }
         
-        public static async Task RunPowerShellCommandAsync(string command, DataReceivedEventHandler callback)
+        public static async Task RunCommandAsync(string command, DataReceivedEventHandler callback)
         {
             await Task.Run(() =>
             {

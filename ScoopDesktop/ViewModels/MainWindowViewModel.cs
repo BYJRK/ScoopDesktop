@@ -49,14 +49,12 @@ public partial class MainWindowViewModel : ObservableObject
                     CurrentPage = new AppsView { DataContext = appsViewModel };
                     IsCommandBarVisible = appsViewModel.IsCommandBarVisible;
                     break;
-                case "BucketList":
-                    throw new NotImplementedException(header);
-                    //CurrentPage = new BucketsView();
-                    break;
                 case "Setting":
                     CurrentPage = new SettingsView { DataContext = settingsViewModel };
                     IsCommandBarVisible = settingsViewModel.IsCommandBarVisible;
                     break;
+                default:
+                    throw new NotImplementedException(header);
             }
         }
     }
