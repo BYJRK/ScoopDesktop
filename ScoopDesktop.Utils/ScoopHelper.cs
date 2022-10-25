@@ -4,7 +4,10 @@ namespace ScoopDesktop.Utils
 {
     public class ScoopHelper
     {
-        public static string ScoopRootDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop");
+        /// <summary>
+        /// Root directory of scoop
+        /// </summary>
+        public static readonly string ScoopRootDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop");
 
         public static string[] GetAppDirs()
         {

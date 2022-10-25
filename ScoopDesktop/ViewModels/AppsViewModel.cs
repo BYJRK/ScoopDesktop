@@ -32,7 +32,11 @@ public partial class AppsViewModel : PageViewModelBase
             var appName = Path.GetFileName(app);
             if (appName == "scoop")
                 continue;
-            AppList.Add(AppInfo.LoadInfoFromPath(app));
+            try
+            {
+                AppList.Add(AppInfo.LoadInfoFromPath(app));
+            }
+            catch { }
         }
 
         foreach (var app in AppList)
@@ -73,6 +77,27 @@ public partial class AppsViewModel : PageViewModelBase
     }
 
     [RelayCommand]
+    private async Task UpdateApp(AppInfo app)
+    {
+        await DialogHelper.Progressive(
+            $"scoop update {app.AppName}",
+            $"Updating {app.AppName}",
+            rule: s =>
+            {
+                return s.Contains("->")
+                || s.StartsWith("Updating")
+                || s.StartsWith("Uninstalling")
+                || s.StartsWith("Installing")
+                || s.StartsWith("Linking")
+                || s.StartsWith("Running")
+                || s.EndsWith("completed.")
+                || s.EndsWith("ok.")
+                || s.EndsWith("done.")
+                || s.EndsWith("successfully!");
+            });
+    }
+
+    [RelayCommand]
     private async Task GetStatus()
     {
         IsBusy = true;
@@ -107,6 +132,19 @@ public partial class AppsViewModel : PageViewModelBase
 
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task Cleanup()
+    {
+        var res = await DialogHelper.YesNo("Are you sure you want to remove all download caches and outdated apps?");
+        if (res != ModernWpf.Controls.ContentDialogResult.Primary)
+            return;
+
+        await DialogHelper.Progressive(
+            "scoop cache rm * && scoop cleanup *",
+            "Scoop Cache & Scoop Cleanup",
+            rule: s => s.StartsWith("Removing") || s.StartsWith("Deleted:") || s.EndsWith("now!"));
     }
 
     #endregion

@@ -72,7 +72,11 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
-                                <MenuItem Header="Update" Visibility="{Binding CanUpdate, Converter={vc:BoolToVisibilityConverter}}">
+                                <MenuItem
+                                    Header="Update"
+                                    Visibility="{Binding CanUpdate, Converter={vc:BoolToVisibilityConverter}}"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.Tag.UpdateAppCommand}"
+                                    CommandParameter="{Binding}">
                                     <MenuItem.Icon>
                                         <ui:FontIcon Glyph="&#xE74A;" FontFamily="Segoe MDL2 Assets" />
                                     </MenuItem.Icon>
@@ -132,7 +136,7 @@
                     </ui:AppBarButton.Icon>
                 </ui:AppBarButton>
                 <ui:AppBarSeparator />
-                <ui:AppBarButton Label="Cleanup" Icon="Delete" IsEnabled="False" />
+                <ui:AppBarButton Label="Cleanup" Icon="Delete" Command="{Binding CleanupCommand}" />
             </ui:CommandBar.PrimaryCommands>
         </ui:CommandBar>
         <ui:ProgressRing Grid.RowSpan="2" d:IsActive="False" IsActive="{Binding IsBusy}" />
