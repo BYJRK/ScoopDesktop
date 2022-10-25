@@ -4,41 +4,34 @@ namespace ScoopDesktop.Utils
 {
     public class PwshHelper
     {
+        private static Process GetPwshProcess(string command)
+        {
+            return new Process
+            {
+                StartInfo = new("powershell.exe", command)
+                {
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false
+                }
+            };
+        }
+
         public static async Task<string> RunCommandAsync(string command)
         {
-            return await Task.Run(() =>
-            {
-                using var p = new Process();
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.FileName = "powershell.exe";
-                p.StartInfo.Arguments = command;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-                return p.StandardOutput.ReadToEnd().TrimEnd();
-            });
+            using var p = GetPwshProcess(command);
+            p.Start();
+            var output = await p.StandardOutput.ReadToEndAsync();
+            return output.TrimEnd();
         }
-        
+
         public static async Task RunCommandAsync(string command, DataReceivedEventHandler callback)
         {
-            await Task.Run(() =>
-            {
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "powershell.exe",
-                        Arguments = command,
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
-
-                process.OutputDataReceived += callback;
-                process.Start();
-                process.BeginOutputReadLine();
-                process.WaitForExit();
-            });
+            using var process = GetPwshProcess(command);
+            process.OutputDataReceived += callback;
+            process.Start();
+            process.BeginOutputReadLine();
+            await process.WaitForExitAsync();
         }
     }
 }

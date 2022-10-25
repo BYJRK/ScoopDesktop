@@ -6,12 +6,12 @@ using System.Windows.Media;
 
 namespace ScoopDesktop.Helpers;
 
-public static class PopupHelper
+public static class DialogHelper
 {
-    static ContentDialog GetDialog(string? info = null, string? title = null, bool isMono = false, bool preventEsc = false)
+    static ContentDialog GetDialog(string? info = null, string? title = null, bool monospace = false, bool preventEsc = false)
     {
         var text = new TextBlock { Text = info };
-        if (isMono)
+        if (monospace)
             text.FontFamily = new FontFamily("Cascadia Mono");
 
         var dialog = new ContentDialog
@@ -33,9 +33,9 @@ public static class PopupHelper
         return dialog;
     }
 
-    public static async Task Info(string info, string? title = null, bool isMono = false, bool preventEsc = false, string closeText = "Close")
+    public static async Task Info(string info, string? title = null, bool monospace = false, bool preventEsc = false, string closeText = "Close")
     {
-        var dialog = GetDialog(info, title, isMono, preventEsc);
+        var dialog = GetDialog(info, title, monospace, preventEsc);
 
         dialog.CloseButtonText = closeText;
         dialog.DefaultButton = ContentDialogButton.Close;
@@ -43,28 +43,30 @@ public static class PopupHelper
         await dialog.ShowAsync();
     }
 
-    public static async Task ScoopStatus(string? title, bool isMono = false)
+    public static async Task Progressive(string command, string? title, string closeText = "Done", bool monospace = false, Predicate<string>? rule = null)
     {
-        var dialog = GetDialog(null, title, isMono, true);
+        var dialog = GetDialog(null, title, monospace, true);
 
         dialog.Loaded += async (_, _) =>
         {
-            await PwshHelper.RunCommandAsync("scoop update", (_, e) =>
+            await PwshHelper.RunCommandAsync(command, (_, e) =>
             {
-                if (e.Data is not null
-                && (e.Data.StartsWith("Updating") || e.Data.EndsWith("successfully!")))
+                if (e.Data is null)
+                    return;
+
+                if (rule == null || rule.Invoke(e.Data))
                 {
                     dialog.Dispatcher.Invoke(() =>
                     {
-                        var text = (TextBlock)dialog.Content;
-                        if (text.Text.Length > 0)
-                            text.Text += "\n";
-                        text.Text += e.Data;
+                        var box = (TextBlock)dialog.Content;
+                        if (!string.IsNullOrWhiteSpace(box.Text))
+                            box.Text += Environment.NewLine;
+                        box.Text += e.Data;
                     });
                 }
             });
 
-            dialog.CloseButtonText = "Done";
+            dialog.CloseButtonText = closeText;
             dialog.DefaultButton = ContentDialogButton.Close;
         };
 

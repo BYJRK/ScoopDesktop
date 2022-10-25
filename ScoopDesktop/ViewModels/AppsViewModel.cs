@@ -60,13 +60,16 @@ public partial class AppsViewModel : PageViewModelBase
 
         IsBusy = false;
 
-        await PopupHelper.Info(message, app.AppName, isMono: true);
+        await DialogHelper.Info(message, app.AppName, monospace: true);
     }
 
     [RelayCommand]
     private async Task Update()
     {
-        await PopupHelper.ScoopStatus("Scoop Update", true);
+        await DialogHelper.Progressive(
+            "scoop update",
+            "Scoop Update",
+            rule: s => s.StartsWith("Updating") || s.EndsWith("successfully!"));
     }
 
     [RelayCommand]
@@ -92,13 +95,13 @@ public partial class AppsViewModel : PageViewModelBase
     [RelayCommand]
     private async Task Uninstall(AppInfo app)
     {
-        if (await PopupHelper.YesNo($"Are you sure you want to uninstall {app.AppName}?", "Scoop Uninstall") == ModernWpf.Controls.ContentDialogResult.Primary)
+        if (await DialogHelper.YesNo($"Are you sure you want to uninstall {app.AppName}?", "Scoop Uninstall") == ModernWpf.Controls.ContentDialogResult.Primary)
         {
             IsBusy = true;
 
             await PwshHelper.RunCommandAsync($"scoop uninstall {app.AppName}");
 
-            await PopupHelper.Info($"{app.AppName} is uninstalled successfully.");
+            await DialogHelper.Info($"{app.AppName} is uninstalled successfully.");
 
             Loaded();
 
