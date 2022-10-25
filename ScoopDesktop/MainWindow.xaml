@@ -13,7 +13,6 @@
     Width="900"
     Height="600"
     ui:TitleBar.IsIconVisible="True"
-    ui:TitleBar.ExtendViewIntoTitleBar="True"
     ui:WindowHelper.UseModernWindowStyle="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
