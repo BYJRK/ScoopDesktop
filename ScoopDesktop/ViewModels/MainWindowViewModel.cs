@@ -17,11 +17,15 @@ public partial class MainWindowViewModel : ObservableObject
 
     AppsViewModel appsViewModel;
     SettingsViewModel settingsViewModel;
+    AboutViewModel aboutViewModel;
+
+    ViewLocator viewLocator = new();
 
     public MainWindowViewModel()
     {
-        appsViewModel = new AppsViewModel();
-        settingsViewModel = new SettingsViewModel();
+        appsViewModel = new();
+        settingsViewModel = new();
+        aboutViewModel = new();
 
         NavigateTo("AppList");
     }
@@ -43,16 +47,24 @@ public partial class MainWindowViewModel : ObservableObject
             switch (header)
             {
                 case "AppList":
-                    CurrentPage = new AppsView { DataContext = appsViewModel };
-                    IsCommandBarVisible = appsViewModel.IsCommandBarVisible;
+                    NavigateTo(appsViewModel);
                     break;
                 case "Setting":
-                    CurrentPage = new SettingsView { DataContext = settingsViewModel };
-                    IsCommandBarVisible = settingsViewModel.IsCommandBarVisible;
+                    NavigateTo(settingsViewModel);
+                    break;
+                case "About":
+                    NavigateTo(aboutViewModel);
                     break;
                 default:
                     throw new NotImplementedException(header);
             }
         }
+    }
+
+    private void NavigateTo(PageViewModelBase viewModel)
+    {
+        CurrentPage = (Page)viewLocator.Build(viewModel);
+        CurrentPage.DataContext = viewModel;
+        IsCommandBarVisible = viewModel.IsCommandBarVisible;
     }
 }
