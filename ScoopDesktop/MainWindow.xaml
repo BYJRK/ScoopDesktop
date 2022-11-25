@@ -38,7 +38,7 @@
                                        Icon="AllApps"
                                        IsSelected="True"
                                        Tag="AppList" />
-                <ui:NavigationViewItem Content="Bucket" Tag="BucketList" Visibility="Collapsed">
+                <ui:NavigationViewItem Content="Bucket" Tag="BucketList">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xe7b8;" />
                     </ui:NavigationViewItem.Icon>

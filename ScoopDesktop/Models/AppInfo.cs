@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ScoopDesktop.Utils;
-using System;
-using System.IO;
+﻿using ScoopDesktop.Utils;
 
 namespace ScoopDesktop.Models;
 
@@ -25,13 +22,20 @@ public partial class AppInfo : ObservableObject
     [ObservableProperty]
     bool canUpdate;
 
+    public AppInfo(string appName, string version, string bucket)
+    {
+        this.appName = appName;
+        this.version = version;
+        this.bucket = bucket;
+    }
+
     public static AppInfo LoadInfoFromPath(string path)
     {
-        return new()
+        var appName = Path.GetFileName(path) ?? throw new ArgumentException(path);
+        var version = ScoopHelper.GetAppVersion(path) ?? throw new ArgumentException(path);
+        var bucket = ScoopHelper.GetAppBucket(path) ?? throw new ArgumentException(path);
+        return new(appName, version, bucket)
         {
-            AppName = Path.GetFileName(path) ?? throw new ArgumentException(path),
-            Version = ScoopHelper.GetAppVersion(path) ?? throw new ArgumentException(path),
-            Bucket = ScoopHelper.GetAppBucket(path) ?? throw new ArgumentException(path),
             HomePage = ScoopHelper.GetAppHomePage(path),
             Folder = path
         };

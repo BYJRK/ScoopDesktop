@@ -14,18 +14,15 @@ public partial class MainWindowViewModel : ObservableObject
 
     #endregion
 
-    AppsViewModel appsViewModel;
-    SettingsViewModel settingsViewModel;
-    AboutViewModel aboutViewModel;
+    AppsViewModel appsViewModel = new();
+    BucketsViewModel bucketsViewModel = new();
+    SettingsViewModel settingsViewModel = new();
+    AboutViewModel aboutViewModel = new();
 
     ViewLocator viewLocator = new();
 
     public MainWindowViewModel()
     {
-        appsViewModel = new();
-        settingsViewModel = new();
-        aboutViewModel = new();
-
         NavigateTo(appsViewModel);
     }
 
@@ -48,6 +45,9 @@ public partial class MainWindowViewModel : ObservableObject
                 case "AppList":
                     NavigateTo(appsViewModel);
                     break;
+                case "BucketList":
+                    NavigateTo(bucketsViewModel);
+                    break;
                 case "Setting":
                     NavigateTo(settingsViewModel);
                     break;
@@ -62,7 +62,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     void NavigateTo(PageViewModelBase viewModel)
     {
-        CurrentPage = (Page)viewLocator.Build(viewModel);
+        var page = viewLocator.Build(viewModel) as Page
+            ?? throw new ArgumentException(viewModel.ToString());
+
+        CurrentPage = page;
         CurrentPage.DataContext = viewModel;
         IsCommandBarVisible = viewModel.IsCommandBarVisible;
     }
