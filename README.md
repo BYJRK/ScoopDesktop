@@ -7,5 +7,7 @@ A Scoop desktop helper based on WPF
 ## Dependencies
 
 - CommunityToolkit.Mvvm
-- Microsoft.Xaml.Behaviors
+- Microsoft.Xaml.Behaviors.Wpf
+- Newtonsoft.Json
 - ModernWpfUI
+- CliWrap
