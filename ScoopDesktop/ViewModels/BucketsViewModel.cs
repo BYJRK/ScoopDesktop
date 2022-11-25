@@ -1,4 +1,5 @@
-﻿using ScoopDesktop.Messages;
+﻿using ScoopDesktop.Helpers;
+using ScoopDesktop.Messages;
 using ScoopDesktop.Models;
 using ScoopDesktop.Utils;
 using System.Collections.ObjectModel;
@@ -17,10 +18,13 @@ public partial class BucketsViewModel : PageViewModelBase
     ListCollectionView bucketAppsView;
 
     [ObservableProperty]
-    BucketInfo selectedBucket;
+    BucketInfo? selectedBucket;
 
     [ObservableProperty]
     string userInputQueryText;
+
+    [ObservableProperty]
+    bool isBusy;
 
     partial void OnUserInputQueryTextChanged(string value)
     {
@@ -85,6 +89,7 @@ public partial class BucketsViewModel : PageViewModelBase
 
         installedApps = WeakReferenceMessenger.Default.Send<RequestInstalledAppsMessage>();
 
+        SelectedBucket = null;
         SelectedBucket = Buckets.First(b => b.BucketName == "main");
     }
 
@@ -118,6 +123,39 @@ public partial class BucketsViewModel : PageViewModelBase
         {
             e.Accepted = app.AppName.Contains(UserInputQueryText);
         }
+    }
+
+    [RelayCommand]
+    private async Task ShowInfo(AppInfo app)
+    {
+        IsBusy = true;
+
+        var message = await PwshHelper.RunCommandAsync($"scoop info {app.AppName}");
+
+        IsBusy = false;
+
+        await DialogHelper.Info(message, app.AppName, monospace: true);
+    }
+
+    [RelayCommand]
+    private async Task InstallApp(AppInfo app)
+    {
+        await DialogHelper.Progressive(
+            $"scoop install {app.AppName}",
+            $"Installing {app.AppName}",
+            rule: s =>
+            {
+                return s.StartsWith("Installing")
+                || s.StartsWith("Starting")
+                || s.StartsWith("Checking")
+                || s.StartsWith("Extracting")
+                || s.StartsWith("Linking")
+                || s.StartsWith("Creating")
+                || s.EndsWith("completed.")
+                || s.EndsWith("successfully!");
+            });
+
+        await Loaded();
     }
 
     #endregion

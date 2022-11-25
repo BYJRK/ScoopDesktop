@@ -29,7 +29,11 @@ namespace ScoopDesktop.Utils
             await Cli
                 .Wrap(command)
                 .WithArguments(arguments)
-                .WithStandardOutputPipe(PipeTarget.ToDelegate(callback))
+                .WithStandardOutputPipe(PipeTarget.ToDelegate(line =>
+                {
+                    line = Regex.Replace(line, @"\x1B\[(?:\d+;)?\dm", "");
+                    callback(line);
+                }))
                 .ExecuteAsync();
         }
 

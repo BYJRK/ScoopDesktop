@@ -1,19 +1,18 @@
-﻿<Page
-    x:Class="ScoopDesktop.Pages.SettingsView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ScoopDesktop.Pages"
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    Title="SettingsView"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    d:Background="White"
-    d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
-    mc:Ignorable="d">
+﻿<Page x:Class="ScoopDesktop.Pages.SettingsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:ScoopDesktop.Pages"
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      Title="SettingsView"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      d:Background="White"
+      d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
+      mc:Ignorable="d">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
@@ -23,28 +22,39 @@
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource SystemControlPageTextBaseHighBrush}" />
         </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Width" Value="250" />
+        </Style>
         <Style x:Key="Subheader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Margin" Value="0,5" />
         </Style>
+        <Style TargetType="ui:ToggleSwitch" BasedOn="{StaticResource {x:Type ui:ToggleSwitch}}">
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
     </Page.Resources>
     <Grid>
-        <StackPanel Margin="12">
+        <StackPanel Margin="12" HorizontalAlignment="Left">
             <TextBlock Margin="0,20" Text="Setting" FontSize="24" />
-            <ui:ToggleSwitch
-                Header="Dark Mode"
-                OnContent="Dark"
-                OffContent="Light"
-                IsOn="{Binding DarkMode, Mode=TwoWay}" />
+            <ui:ToggleSwitch Margin="0"
+                             Header="Dark Mode"
+                             OnContent="Dark"
+                             OffContent="Light"
+                             IsOn="{Binding DarkMode, Mode=TwoWay}" />
+            <ui:ToggleSwitch Header="Use aria2 to download"
+                             OnContent="Enabled"
+                             OffContent="Disabled"
+                             IsOn="{Binding UseAria2, Mode=TwoWay}" />
+
             <TextBlock Text="Scoop Proxy" Style="{DynamicResource Subheader}" />
-            <DockPanel>
-                <Button
-                    Width="75"
-                    Margin="12,0,0,0"
-                    Content="Apply"
-                    DockPanel.Dock="Right" />
+            <StackPanel Orientation="Horizontal">
                 <TextBox ui:ControlHelper.PlaceholderText="Proxy IP and port" Text="{Binding Proxy}" />
-            </DockPanel>
+                <Button Width="75" Margin="12,0,0,0" Content="Apply" />
+            </StackPanel>
+
+            <TextBlock Text="Last Updated" Style="{DynamicResource Subheader}" />
+            <TextBox IsReadOnly="True" Text="{Binding LastUpdate}" />
         </StackPanel>
 
         <ui:ProgressRing IsActive="{Binding IsBusy}" />

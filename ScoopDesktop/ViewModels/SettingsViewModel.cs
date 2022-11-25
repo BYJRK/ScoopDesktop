@@ -1,5 +1,6 @@
 ﻿using ModernWpf;
 using ScoopDesktop.Utils;
+using System.Text.RegularExpressions;
 
 namespace ScoopDesktop.ViewModels;
 
@@ -9,7 +10,13 @@ public partial class SettingsViewModel : PageViewModelBase
     bool darkMode;
 
     [ObservableProperty]
+    bool useAria2;
+
+    [ObservableProperty]
     string proxy;
+
+    [ObservableProperty]
+    string lastUpdate;
 
     [ObservableProperty]
     bool isBusy;
@@ -18,6 +25,11 @@ public partial class SettingsViewModel : PageViewModelBase
     {
         Properties.Settings.Default.DarkMode = value;
         ThemeManager.Current.ApplicationTheme = value ? ApplicationTheme.Dark : ApplicationTheme.Light;
+    }
+
+    partial void OnUseAria2Changed(bool value)
+    {
+        Task.Run(async () => await PwshHelper.RunCommandAsync($"scoop config aria2-enabled {value}"));
     }
 
     public SettingsViewModel()
@@ -32,7 +44,12 @@ public partial class SettingsViewModel : PageViewModelBase
     {
         IsBusy = true;
 
-        Proxy = await PwshHelper.RunCommandAsync("scoop config proxy");
+        await Task.WhenAll(
+            Task.Run(async () => Proxy = await PwshHelper.RunCommandAsync("scoop config proxy")),
+            Task.Run(async () => LastUpdate = Regex.Match(await PwshHelper.RunCommandAsync("scoop config"), @"(?m)last_update\s+:\s+(.*)$").Groups[1].Value.TrimEnd()),
+            Task.Run(async () => UseAria2 = (await PwshHelper.RunCommandAsync("scoop config aria2-enabled")) == "True")
+            );
+        ;
 
         IsBusy = false;
     }

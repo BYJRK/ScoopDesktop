@@ -74,7 +74,8 @@ public partial class AppsViewModel : PageViewModelBase
         await DialogHelper.Progressive(
             "scoop update",
             "Scoop Update",
-            rule: s => s.StartsWith("Updating") || s.EndsWith("successfully!"));
+            rule: s => s.StartsWith("Updating") || s.EndsWith("successfully!")
+        );
     }
 
     [RelayCommand]
@@ -86,16 +87,17 @@ public partial class AppsViewModel : PageViewModelBase
             rule: s =>
             {
                 return s.Contains("->")
-                || s.StartsWith("Updating")
-                || s.StartsWith("Uninstalling")
-                || s.StartsWith("Installing")
-                || s.StartsWith("Linking")
-                || s.StartsWith("Running")
-                || s.EndsWith("completed.")
-                || s.EndsWith("ok.")
-                || s.EndsWith("done.")
-                || s.EndsWith("successfully!");
-            });
+                    || s.StartsWith("Updating")
+                    || s.StartsWith("Uninstalling")
+                    || s.StartsWith("Installing")
+                    || s.StartsWith("Linking")
+                    || s.StartsWith("Running")
+                    || s.EndsWith("completed.")
+                    || s.EndsWith("ok.")
+                    || s.EndsWith("done.")
+                    || s.EndsWith("successfully!");
+            }
+        );
     }
 
     [RelayCommand]
@@ -121,31 +123,41 @@ public partial class AppsViewModel : PageViewModelBase
     [RelayCommand]
     private async Task Uninstall(AppInfo app)
     {
-        if (await DialogHelper.YesNo($"Are you sure you want to uninstall {app.AppName}?", "Scoop Uninstall") == ModernWpf.Controls.ContentDialogResult.Primary)
+        if (
+            await DialogHelper.YesNo(
+                $"Are you sure you want to uninstall {app.AppName}?",
+                "Scoop Uninstall"
+            ) == ModernWpf.Controls.ContentDialogResult.Primary
+        )
         {
-            IsBusy = true;
-
-            await PwshHelper.RunCommandAsync($"scoop uninstall {app.AppName}");
-
-            await DialogHelper.Info($"{app.AppName} is uninstalled successfully.");
+            await DialogHelper.Progressive(
+                $"scoop uninstall {app.AppName}",
+                $"Uninstalling {app.AppName}",
+                rule: s =>
+                    s.StartsWith("Uninstalling")
+                    || s.StartsWith("Removing")
+                    || s.StartsWith("Unlinking")
+                    || s.EndsWith("uninstalled.")
+            );
 
             Loaded();
-
-            IsBusy = false;
         }
     }
 
     [RelayCommand]
     private async Task Cleanup()
     {
-        var res = await DialogHelper.YesNo("Are you sure you want to remove all download caches and outdated apps?");
+        var res = await DialogHelper.YesNo(
+            "Are you sure you want to remove all download caches and outdated apps?"
+        );
         if (res != ModernWpf.Controls.ContentDialogResult.Primary)
             return;
 
         await DialogHelper.Progressive(
             "scoop cache rm * && scoop cleanup *",
             "Scoop Cache & Scoop Cleanup",
-            rule: s => s.StartsWith("Removing") || s.StartsWith("Deleted:") || s.EndsWith("now!"));
+            rule: s => s.StartsWith("Removing") || s.StartsWith("Deleted:") || s.EndsWith("now!")
+        );
     }
 
     #endregion
@@ -156,9 +168,12 @@ public partial class AppsViewModel : PageViewModelBase
 
         updateApps = new HashSet<string>();
 
-        WeakReferenceMessenger.Default.Register<RequestInstalledAppsMessage>(this, (_, m) =>
-        {
-            m.Reply(AppList.Select(app => app.AppName).ToHashSet());
-        });
+        WeakReferenceMessenger.Default.Register<RequestInstalledAppsMessage>(
+            this,
+            (_, m) =>
+            {
+                m.Reply(AppList.Select(app => app.AppName).ToHashSet());
+            }
+        );
     }
 }
