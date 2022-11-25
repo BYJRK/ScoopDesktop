@@ -9,15 +9,26 @@ namespace ScoopDesktop.Utils
         /// <summary>
         /// Root directory of scoop
         /// </summary>
-        public static readonly string ScoopRootDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop");
+        public static readonly string ScoopRootDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "scoop"
+        );
 
         /// <summary>
         /// 获取所有 ~/scoop/apps 下的文件夹的路径
         /// </summary>
         /// <returns></returns>
-        public static string[] GetAppDirs()
+        public static IEnumerable<string> GetAppDirs()
         {
             return Directory.GetDirectories(Path.Combine(ScoopRootDir, "apps"));
+        }
+
+        /// <summary>
+        /// 获取所有 ~/scoop/buckets 下的文件夹路径
+        /// </summary>
+        public static IEnumerable<string> GetBucketDirs()
+        {
+            return Directory.GetDirectories(Path.Combine(ScoopRootDir, "buckets"));
         }
 
         /// <summary>
@@ -53,8 +64,31 @@ namespace ScoopDesktop.Utils
             var jsonFile = Path.Combine(appDir, "current", "manifest.json");
             if (!File.Exists(jsonFile))
                 return null;
-            var jsonText = File.ReadAllText(jsonFile);
-            return JObject.Parse(jsonText)["homepage"]?.ToString();
+            return GetExtraInfoFromJson(jsonFile).HomePage;
+        }
+
+        /// <summary>
+        /// 从 manifest.json 中获取额外的信息
+        /// </summary>
+        public static (string Version, string Desc, string HomePage) GetExtraInfoFromJson(string jsonFile)
+        {
+            if (!File.Exists(jsonFile))
+                return default;
+
+            var obj = JObject.Parse(File.ReadAllText(jsonFile));
+            return (
+                obj["version"]!.ToString(),
+                obj["description"]!.ToString(),
+                obj["homepage"]!.ToString()
+            );
+        }
+
+        /// <summary>
+        /// 从 bucket 文件夹中获取 app 列表
+        /// </summary>
+        public static IEnumerable<string> GetBucketAppList(string bucketDir)
+        {
+            return Directory.GetFiles(Path.Combine(bucketDir, "bucket"), "*.json");
         }
     }
 }

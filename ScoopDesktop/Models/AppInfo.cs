@@ -22,6 +22,12 @@ public partial class AppInfo : ObservableObject
     [ObservableProperty]
     bool canUpdate;
 
+    [ObservableProperty]
+    bool isInstalled;
+
+    [ObservableProperty]
+    string? desc;
+
     public AppInfo(string appName, string version, string bucket)
     {
         this.appName = appName;

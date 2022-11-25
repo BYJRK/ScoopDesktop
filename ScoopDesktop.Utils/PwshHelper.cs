@@ -1,5 +1,6 @@
 ﻿using CliWrap;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ScoopDesktop.Utils
 {
@@ -11,7 +12,8 @@ namespace ScoopDesktop.Utils
             await Cli
                 .Wrap(command)
                 .WithArguments(arguments)
-                .WithStandardOutputPipe(PipeTarget.ToStringBuilder(sb))
+                .WithStandardOutputPipe(PipeTarget.ToDelegate(line =>
+                    sb.AppendLine(Regex.Replace(line, @"\x1B\[(?:\d+;)?\dm", ""))))
                 .ExecuteAsync();
             return sb.ToString().TrimEnd();
         }

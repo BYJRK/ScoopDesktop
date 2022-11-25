@@ -6,11 +6,22 @@
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Spoon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Include="Spoon.ico" />
+		<Content Include="Spoon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.IO" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="System.Collections.Generic" />
+		<Using Include="CommunityToolkit.Mvvm.ComponentModel" />
+		<Using Include="CommunityToolkit.Mvvm.Input" />
+		<Using Include="CommunityToolkit.Mvvm.Messaging" />
+		<Using Include="CommunityToolkit.Mvvm.Messaging.Messages "/>
 	</ItemGroup>
 
 	<ItemGroup>
