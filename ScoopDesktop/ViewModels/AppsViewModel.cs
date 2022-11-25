@@ -1,4 +1,5 @@
 ﻿using ScoopDesktop.Helpers;
+using ScoopDesktop.Messages;
 using ScoopDesktop.Models;
 using ScoopDesktop.Utils;
 using System.Collections.ObjectModel;
@@ -154,5 +155,10 @@ public partial class AppsViewModel : PageViewModelBase
         IsCommandBarVisible = true;
 
         updateApps = new HashSet<string>();
+
+        WeakReferenceMessenger.Default.Register<RequestInstalledAppsMessage>(this, (_, m) =>
+        {
+            m.Reply(AppList.Select(app => app.AppName).ToHashSet());
+        });
     }
 }

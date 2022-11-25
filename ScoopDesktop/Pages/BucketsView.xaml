@@ -5,20 +5,67 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:ScoopDesktop.Pages"
       xmlns:ui="http://schemas.modernwpf.com/2019"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
       Title="BucketsView"
       d:DesignHeight="450"
       d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance vm:BucketsViewModel}"
       mc:Ignorable="d">
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ui:AutoSuggestBox />
+        <DockPanel Margin="5">
+            <ComboBox Width="200"
+                      Margin="0,0,5,0"
+                      DockPanel.Dock="Left"
+                      SelectedItem="{Binding SelectedBucket}"
+                      ItemsSource="{Binding Buckets}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding BucketName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ui:AutoSuggestBox PlaceholderText="Type an app name" Text="{Binding UserInputQueryText, Mode=TwoWay}" ItemsSource="{Binding Suggestions}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding QueryAppNameCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ui:AutoSuggestBox>
+        </DockPanel>
 
-        <DataGrid Grid.Row="1" Margin="0,5,0,0">
+        <DataGrid Grid.Row="1"
+                  Margin="0,5,0,0"
+                  CanUserSortColumns="True"
+                  ItemsSource="{Binding BucketAppsView}"
+                  Style="{StaticResource ReadOnlyDataGrid}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding AppName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Version" Binding="{Binding Version}" IsReadOnly="True" />
+                <DataGridCheckBoxColumn Header="Installed" Binding="{Binding IsInstalled}" IsReadOnly="True" />
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource DefaultDataGridRowStyle}">
+                    <Setter Property="ToolTip" Value="{Binding Desc}" />
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
+
+        <ui:CommandBar Grid.Row="2">
+            <ui:CommandBar.PrimaryCommands>
+                <ui:AppBarButton Label="Refresh" Icon="Refresh" Command="{Binding LoadedCommand}" />
+            </ui:CommandBar.PrimaryCommands>
+        </ui:CommandBar>
     </Grid>
 </Page>
