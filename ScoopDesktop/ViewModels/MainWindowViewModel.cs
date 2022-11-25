@@ -1,5 +1,4 @@
-﻿using ScoopDesktop.Pages;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace ScoopDesktop.ViewModels;
 
@@ -8,7 +7,7 @@ public partial class MainWindowViewModel : ObservableObject
     #region Observable Properties
 
     [ObservableProperty]
-    Page currentPage;
+    Page? currentPage;
 
     [ObservableProperty]
     bool isCommandBarVisible;
@@ -27,7 +26,7 @@ public partial class MainWindowViewModel : ObservableObject
         settingsViewModel = new();
         aboutViewModel = new();
 
-        NavigateTo("AppList");
+        NavigateTo(appsViewModel);
     }
 
     #region Relay Commands
@@ -40,7 +39,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     #endregion
 
-    private void NavigateTo(string header)
+    void NavigateTo(string header)
     {
         if (header != null)
         {
@@ -61,7 +60,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private void NavigateTo(PageViewModelBase viewModel)
+    void NavigateTo(PageViewModelBase viewModel)
     {
         CurrentPage = (Page)viewLocator.Build(viewModel);
         CurrentPage.DataContext = viewModel;

@@ -87,19 +87,16 @@ public static class DialogHelper
 
         dialog.Loaded += async (_, _) =>
         {
-            await PwshHelper.RunCommandAsync(command, (_, e) =>
+            await PwshHelper.RunCommandAsync(command, line =>
             {
-                if (e.Data is null)
-                    return;
-
-                if (rule == null || rule.Invoke(e.Data))
+                if (rule == null || rule.Invoke(line))
                 {
                     dialog.Dispatcher.Invoke(() =>
                     {
                         var box = (TextBlock)dialog.Content;
                         if (!string.IsNullOrWhiteSpace(box.Text))
                             box.Text += Environment.NewLine;
-                        box.Text += e.Data;
+                        box.Text += line;
                     });
                 }
             });

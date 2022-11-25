@@ -1,21 +1,20 @@
-﻿<Window
-    x:Class="ScoopDesktop.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:local="clr-namespace:ScoopDesktop"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
-    xmlns:vc="clr-namespace:ScoopDesktop.Converters"
-    Title="Scoop Desktop"
-    Width="900"
-    Height="600"
-    ui:TitleBar.IsIconVisible="True"
-    ui:WindowHelper.UseModernWindowStyle="True"
-    WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
+﻿<Window x:Class="ScoopDesktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:local="clr-namespace:ScoopDesktop"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:vm="clr-namespace:ScoopDesktop.ViewModels"
+        xmlns:vc="clr-namespace:ScoopDesktop.Converters"
+        Title="Scoop Desktop"
+        Width="900"
+        Height="600"
+        ui:TitleBar.IsIconVisible="True"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -25,22 +24,20 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ui:NavigationView
-            IsBackButtonVisible="Collapsed"
-            IsSettingsVisible="False"
-            PaneDisplayMode="LeftCompact"
-            OpenPaneLength="200">
+        <ui:NavigationView IsBackButtonVisible="Collapsed"
+                           IsSettingsVisible="False"
+                           PaneDisplayMode="LeftCompact"
+                           OpenPaneLength="200">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="ItemInvoked">
                     <i:InvokeCommandAction Command="{Binding NavigationViewCommand}" PassEventArgsToCommand="True" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem
-                    Content="App List"
-                    Icon="AllApps"
-                    IsSelected="True"
-                    Tag="AppList" />
+                <ui:NavigationViewItem Content="App List"
+                                       Icon="AllApps"
+                                       IsSelected="True"
+                                       Tag="AppList" />
                 <ui:NavigationViewItem Content="Bucket" Tag="BucketList" Visibility="Collapsed">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xe7b8;" />
