@@ -18,6 +18,11 @@
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -34,18 +39,18 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="App List"
+                <ui:NavigationViewItem Content="Installed Apps"
                                        Icon="AllApps"
                                        IsSelected="True"
                                        Tag="AppList" />
-                <ui:NavigationViewItem Content="Bucket" Tag="BucketList">
+                <ui:NavigationViewItem Content="Buckets" Tag="BucketList">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xe7b8;" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
-                <ui:NavigationViewItem Content="Setting" Icon="Setting" Tag="Setting" />
+                <ui:NavigationViewItem Content="Settings" Icon="Setting" Tag="Setting" />
                 <ui:NavigationViewItem Content="About" Tag="About">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xe946;" />

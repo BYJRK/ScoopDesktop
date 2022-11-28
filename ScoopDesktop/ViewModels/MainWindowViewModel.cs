@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using ScoopDesktop.Helpers;
+using ScoopDesktop.Utils;
+using System.Windows.Controls;
 
 namespace ScoopDesktop.ViewModels;
 
@@ -23,7 +25,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
-        NavigateTo(appsViewModel);
+
     }
 
     #region Relay Commands
@@ -32,6 +34,18 @@ public partial class MainWindowViewModel : ObservableObject
     void NavigationView(ModernWpf.Controls.NavigationViewItemInvokedEventArgs e)
     {
         NavigateTo((string)e.InvokedItemContainer.Tag);
+    }
+
+    [RelayCommand]
+    async Task Loaded()
+    {
+        if (!Directory.Exists(ScoopHelper.ScoopRootDir))
+        {
+            await DialogHelper.Info("Scoop is not installed. You may type\n\n$ iwr -useb get.scoop.sh | iex\n\nin PowerShell to install.", "Error");
+            ApplicationHelper.Exit();
+        }
+
+        NavigateTo(appsViewModel);
     }
 
     #endregion
