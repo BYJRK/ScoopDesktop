@@ -37,13 +37,13 @@ public partial class BucketsViewModel : PageViewModelBase
     [ObservableProperty]
     List<string> suggestions;
 
-    partial void OnSelectedBucketChanged(BucketInfo value)
+    partial void OnSelectedBucketChanged(BucketInfo? value)
     {
         if (value is null)
             return;
 
         bucketApps = new(
-            SelectedBucket.AppList
+            SelectedBucket!.AppList
             .Select(app => new AppInfo(Path.GetFileNameWithoutExtension(app), "", value.BucketName)));
 
         Task.Run(() =>
@@ -91,6 +91,16 @@ public partial class BucketsViewModel : PageViewModelBase
 
         SelectedBucket = null;
         SelectedBucket = Buckets.First(b => b.BucketName == "main");
+    }
+
+    [RelayCommand]
+    private async Task Update()
+    {
+        await DialogHelper.Progressive(
+            "scoop update",
+            "Scoop Update",
+            rule: s => s.StartsWith("Updating") || s.EndsWith("successfully!")
+        );
     }
 
     void InitBucketAppsView()

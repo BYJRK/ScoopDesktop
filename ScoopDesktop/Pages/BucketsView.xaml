@@ -82,6 +82,7 @@
         <ui:CommandBar Grid.Row="2">
             <ui:CommandBar.PrimaryCommands>
                 <ui:AppBarButton Label="Refresh" Icon="Refresh" Command="{Binding LoadedCommand}" />
+                <ui:AppBarButton Label="Update" Icon="Sync" Command="{Binding UpdateCommand}" />
             </ui:CommandBar.PrimaryCommands>
         </ui:CommandBar>
 

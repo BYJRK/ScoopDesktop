@@ -88,6 +88,7 @@ public partial class AppsViewModel : PageViewModelBase
             {
                 return s.Contains("->")
                     || s.StartsWith("Updating")
+                    || s.StartsWith("Downloading")
                     || s.StartsWith("Uninstalling")
                     || s.StartsWith("Installing")
                     || s.StartsWith("Linking")
