@@ -3,6 +3,7 @@ using ScoopDesktop.Messages;
 using ScoopDesktop.Models;
 using ScoopDesktop.Utils;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Data;
 
 namespace ScoopDesktop.ViewModels;
@@ -101,6 +102,12 @@ public partial class BucketsViewModel : PageViewModelBase
             "Scoop Update",
             rule: s => s.StartsWith("Updating") || s.EndsWith("successfully!")
         );
+    }
+
+    [RelayCommand]
+    private void OpenHomePage(AppInfo app)
+    {
+        Process.Start("explorer", app.HomePage);
     }
 
     void InitBucketAppsView()
